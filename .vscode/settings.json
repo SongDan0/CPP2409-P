@@ -12,6 +12,7 @@
         "fstream": "cpp",
         "chrono": "cpp",
         "ostream": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "limits": "cpp"
     }
 }

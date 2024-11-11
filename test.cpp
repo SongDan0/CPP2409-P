@@ -5,6 +5,7 @@
 #include <string>
 #include <algorithm>
 #include <chrono>
+#include <cstdlib>
 
 using namespace std;
 class Schedule {
@@ -398,6 +399,67 @@ void loadFromFile(const string& filename) {
         cout << "설정 파일이 없으므로 기본값을 사용합니다." << endl;
     }
 }
+    void menu() {
+        string input;
+        while(true) {
+            cout << "캘린더, 일정 추가, 일정 삭제, 플래너, 암호화 메모장, 가계부, 종료 중 하나를 선택해서 입력해주세요: ";
+            getline(cin, input);
+            if(input == "캘린더") {
+                int year, month;
+                cout << "0000 00 형태로 연도와 월을 입력해주세요: ";
+                cin >> year >> month;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                system("cls");
+                printCalendar(year, month);
+            }
+            else if(input == "일정 추가") {
+                int year_s, month_s, day_s;
+                int year_e, month_e, day_e;
+                string detail;
+                cout << "시작 날짜를 0000 00 00 형태로 연도, 월, 일을 입력해주세요: ";
+                cin >> year_s >> month_s >> day_s;
+                cout << "종료 날짜를 0000 00 00 형태로 연도, 월, 일을 입력해주세요: ";
+                cin >> year_e >> month_e >> day_e;
+                cout << "9글자 이내의 한글로 일정을 입력해주세요(띄어쓰기 사용금지): ";
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                getline(cin, detail);
+                addSchedule(year_s, month_s, day_s, year_e, month_e, day_e, detail);
+                system("cls");
+                printCalendar(year_s, month_s);
+            }
+            else if(input == "일정 삭제") {
+                int year_s, month_s, day_s;
+                int year_e, month_e, day_e;
+                string detail;
+                cout << "삭제할 일정의 시작 날짜를 0000 00 00 형태로 연도, 월, 일을 입력해주세요: ";
+                cin >> year_s >> month_s >> day_s;
+                cout << "삭제할 일정의 종료 날짜를 0000 00 00 형태로 연도, 월, 일을 입력해주세요: ";
+                cin >> year_e >> month_e >> day_e;
+                cout << "삭제할 일정을 적어주세요: ";
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                getline(cin, detail);
+                delSchedule(year_s, month_s, day_s, year_e, month_e, day_e, detail);
+                system("cls");
+                printCalendar(year_s, month_s);
+            }
+            else if(input == "플래너") {
+
+            }
+            else if(input == "암호화 메모장") {
+
+            }
+            else if(input == "가계부") {
+
+            }
+            else if(input == "종료") {
+                cout << "종료합니다.";
+                break;
+            }
+            else {
+                cout << "잘못된 입력입니다.";
+            }
+        }
+    }
 
 };
 
@@ -405,7 +467,5 @@ void loadFromFile(const string& filename) {
 int main() {
     Calendar cal{};
     //cal.addSchedule(2024, 12, 14, 2025, 1, 16,"송결");
-    cal.printCalendar(2024, 12);
-    cal.printCalendar(2025, 1);
-    cout << cal.maxYearIndex;
+    cal.menu();
 }
