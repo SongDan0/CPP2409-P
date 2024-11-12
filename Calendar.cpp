@@ -1,4 +1,5 @@
 #include "Calendar.hpp"
+using namespace std;
 
 //생성자(달력 해당 연도만 할당)
 Calendar::Calendar() {
@@ -18,6 +19,7 @@ Calendar::Calendar() {
         addYear();
     }while(maxYearIndex < index);
     loadFromFile("schedule");
+    plan = new Planner{};
 }
 
 //달력 범위 1년 증가(다음 연도 할당)
@@ -194,6 +196,13 @@ void Calendar::printCalendar(int year, int month, int day) {
         cout << "날짜가 유효하지 않습니다.";
         return;
     }
+     //달력 할당 여부 판단하여 할당
+    if(maxYearIndex < year - initial_year) {
+        for(; maxYearIndex < year - initial_year;) {
+            addYear();
+        }
+    }
+
     //윤년 판단
     const int* Days;
     if(checkLeapYear(year))
@@ -409,7 +418,7 @@ void Calendar::menu() {
             printCalendar(year_s, month_s);
         }
         else if(input == "플래너") {
-
+            plan->menu();
         }
         else if(input == "암호화 메모장") {
 

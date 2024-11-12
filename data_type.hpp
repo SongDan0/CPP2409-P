@@ -1,5 +1,5 @@
-    #include<string>
-    #include<vector>
+    #include <string>
+    #include <vector>
     #include <algorithm>
 
     using namespace std;
