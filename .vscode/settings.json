@@ -13,6 +13,8 @@
         "chrono": "cpp",
         "ostream": "cpp",
         "span": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "algorithm": "cpp",
+        "format": "cpp"
     }
 }
