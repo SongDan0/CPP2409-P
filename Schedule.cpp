@@ -1,4 +1,4 @@
-#include "data_type.hpp"
+#include "Schedule.hpp"
 
 //일정 추가
 void Schedule::addSchedule(string detail) {
