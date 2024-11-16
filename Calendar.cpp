@@ -13,10 +13,12 @@ void Calendar::addSchedule(int year_s, int month_s, int day_s, int year_e, int m
         return;
     }
     // 시작 날짜 < 종료 날짜가 유효한지 체크
-    else if(year_s > year_e || month_s > month_e || day_s > day_e){
-        cout << "날짜가 유효하지 않습니다.";
-        return;
-    }
+    if (year_s > year_e || 
+    (year_s == year_e && month_s > month_e) || 
+    (year_s == year_e && month_s == month_e && day_s > day_e)) {
+    cout << "날짜가 유효하지 않습니다.";
+    return;
+}
 
     // 프로그램 시작 시 일정이 있는 날짜까지만 할당하기 위해 변수값 변경 및 달력 할당 여부 판단하여 할당
     if(maxYearIndex < year_e - initial_year) {
@@ -55,7 +57,7 @@ void Calendar::addSchedule(int year_s, int month_s, int day_s, int year_e, int m
         for(int m = month_s; m < MAX_MONTHS; m++) {                                     //시작 연도의 나머지 달
             for(int d = 0;  d < Days_M[m]; d++)
                 date[year_s - initial_year][m][d].addSchedule(detail);
-            }
+        }
         //중간 연도
         for(int y = year_s - initial_year + 1; y < year_e - initial_year; y++){         //중간 연도의 전체
             for(int m = 0; m < MAX_MONTHS; m++) {
@@ -83,10 +85,12 @@ void Calendar::delSchedule(int year_s, int month_s, int day_s, int year_e, int m
         return;
     }
     // 시작 날짜 < 종료 날짜가 유효한지 체크
-    else if(year_s > year_e || month_s > month_e || day_s > day_e){
-        cout << "날짜가 유효하지 않습니다.";
-        return;
-    }
+    if (year_s > year_e || 
+    (year_s == year_e && month_s > month_e) || 
+    (year_s == year_e && month_s == month_e && day_s > day_e)) {
+    cout << "날짜가 유효하지 않습니다.";
+    return;
+}
 
     //끝 연도가 할당된 연도보다 범위가 클 경우 할당된 범위로 변경
     if(year_e - initial_year > maxYearIndex)
@@ -142,6 +146,7 @@ void Calendar::delSchedule(int year_s, int month_s, int day_s, int year_e, int m
 
 // 캘린더 표시
 void Calendar::printCalendar(int year, int month, int day) {
+    system("cls");
     //날짜 유효한지 체크
     if(!check_range(year, month, day)) {
         cout << "날짜가 유효하지 않습니다.";
@@ -255,7 +260,6 @@ void Calendar::menu() {
             cout << "0000 00 형태로 연도와 월을 입력해주세요: ";
             cin >> year >> month;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            system("cls");
             printCalendar(year, month);
         }
         else if(input == "일정추가") {
@@ -270,7 +274,6 @@ void Calendar::menu() {
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, detail);
             addSchedule(year_s, month_s, day_s, year_e, month_e, day_e, detail);
-            system("cls");
             printCalendar(year_s, month_s);
         }
         else if(input == "일정삭제") {
@@ -285,7 +288,6 @@ void Calendar::menu() {
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, detail);
             delSchedule(year_s, month_s, day_s, year_e, month_e, day_e, detail);
-            system("cls");
             printCalendar(year_s, month_s);
         }
         else if(input == "플래너") {

@@ -117,7 +117,6 @@ void Planner::menu() {
         }
         // 뒤로 가기
         else if(input == "뒤로가기") {
-            
             break;
         }
         // 잘못된 입력

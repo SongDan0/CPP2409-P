@@ -155,7 +155,7 @@ void Date::loadFromFile(const string& filename) {
         while (inFile >> year >> month >> day) {                        // 연도, 월, 일 읽어오기 
             inFile.ignore();                                            // 한 칸 건너띄어 공백 무기
             getline(inFile, detail);                                    // 일정 읽어오기
-            date[yearIndex][month - 1][day - 1].addSchedule(detail); // 읽어온 일정 추가
+            date[year-initial_year][month - 1][day - 1].addSchedule(detail); // 읽어온 일정 추가
         }
 
         inFile.close();                                                 //파일 닫기
