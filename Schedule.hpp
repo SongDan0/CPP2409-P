@@ -10,15 +10,15 @@
         vector<string> schedule;  
     public: 
         //일정 추가
-        void addSchedule(string detail);
+        void AddSchedule(string detail);
         //일정 삭제
-        void delSchedule(string detail);
+        void DelSchedule(string detail);
         //일정vector 반환
-        vector<string> getSchedule_v();
+        vector<string> GetScheduleVector();
         //index번째 일정 반환
-        string getSchedule_s(int index);
+        string GetScheduleString(int index);
         //일정 개수 반환
-        int countSchedule();
+        int CountSchedule();
         //일정이 비어있는지 확인
-        bool emptySchedule();
+        bool EmptySchedule();
     };

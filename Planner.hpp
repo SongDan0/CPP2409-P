@@ -6,18 +6,18 @@ public:
     Planner();
 
     // 플래너 일정 추가
-    void addSchedule(string detail);
+    void AddSchedule(string detail);
 
     // 플래너 일정 삭제
-    void delSchedule(string detail);
+    void DelSchedule(string detail);
 
     // 플래너 표시
-    void printPlanner();
+    void PrintPlanner();
 
     // 일정 출력
-    void printSchedule();
+    void PrintSchedule();
 
     // 메뉴
-    void menu() ;
+    void Menu() ;
 
 };

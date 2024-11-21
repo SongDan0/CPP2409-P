@@ -2,5 +2,5 @@
 
 int main() {
     Calendar cal{};
-    cal.menu();
+    cal.Menu();
 }
