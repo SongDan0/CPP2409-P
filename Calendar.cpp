@@ -8,6 +8,7 @@ Calendar::Calendar() {
     current_month = bd->current_month;
     current_day = bd->current_day;
     plan = new Planner{};
+    accountBook = new AccountBook{};
 }
 
 // 캘린더 일정 추가
@@ -196,6 +197,7 @@ void Calendar::PrintCalendar(int year, int month, int day) {
                 cout << endl;
                 cout << "├──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┤" << endl;
                 PrintSchedule(year, month, 1, 7-index, -1);
+                PrintTotle(year, month, 1, 7-index, -1);
                 cout << "├──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┤" << endl;
             }
             cout << "│";
@@ -208,6 +210,7 @@ void Calendar::PrintCalendar(int year, int month, int day) {
             cout << endl;
             cout << "├──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┤" << endl;
             PrintSchedule(year, month, day-7, day-1);
+            PrintTotle(year, month, day-7, day-1);
             cout << "├──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┤" << endl;
         }
     index = kDaysPoint[month-1] - day + 1;
@@ -219,6 +222,7 @@ void Calendar::PrintCalendar(int year, int month, int day) {
         cout << endl;
         cout << "├──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┤" << endl;
         PrintSchedule(year, month, kDaysPoint[month-1]-index+1, kDaysPoint[month-1],  1);
+        PrintTotle(year, month, kDaysPoint[month-1]-index+1, kDaysPoint[month-1],  1);
     cout << "└──────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────────────┘" << endl;
         
 }
@@ -249,6 +253,27 @@ void Calendar::PrintSchedule(int year, int month, int day_s, int day_e, int spac
         cout << endl;
     }
         
+}   
+
+// 가계부 일의 합계 출력
+void Calendar::PrintTotle(int year, int month, int day_s, int day_e, int space_position) {
+    cout << "│";
+    if(space_position == -1) {
+        for(int s = day_e-day_s+1; s < 7; s++)
+            cout << "                  │";
+    }
+    for(int d = day_s-1; d < day_e; d++) {
+        cout << "합계: " << accountBook->GetTotal(year, month, d+1) << "원";
+        for(int k = accountBook->GetTotal(year, month, d+1).length(); k < 10; k++) 
+            cout << " ";
+        cout << "│";
+    }     
+    if(space_position == 1) {
+       for(int s = day_e-day_s+1; s < 7; s++)
+           cout << "                  │";
+    }
+    
+        cout << endl;   
 }   
 
 // 메뉴
@@ -304,7 +329,9 @@ void Calendar::Menu() {
 
         }
         else if(input == "가계부") {
-
+            accountBook->Menu();
+            system("cls");
+            PrintCalendar(current_year, current_month);
         }
         else if(input == "종료") {
             cout << "종료합니다.";

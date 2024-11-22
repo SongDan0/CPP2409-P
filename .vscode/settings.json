@@ -17,7 +17,10 @@
         "algorithm": "cpp",
         "format": "cpp",
         "iosfwd": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "sstream": "cpp",
+        "regex": "cpp",
+        "bitset": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

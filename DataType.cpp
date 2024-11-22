@@ -29,17 +29,17 @@ int Schedule::CountSchedule() {
 bool Schedule::EmptySchedule() {
     return schedule.empty();
 }
-/*
-// 거래 내역 추가
+
+//거래 내역 추가
 void Transaction::AddTransaction(string detail, int price) {
     transactionDetail.push_back(detail);
-    transactionPrice.push_back(price);
+    transactionPrice.push_back(to_string(price));
 }
 
 // 거래 내역 삭제
-void Transaction::DelTransaction(string detail, int price) {
-    transactionDetail.erase(remove(transactionDetail.begin(), transactionDetail.end(), transactionDetail), transactionDetail.end());
-    transactionPrice.erase(remove(transactionPrice.begin(), transactionPrice.end(), transactionPrice), transactionPrice.end());
+void Transaction::DelTransaction(string detail, string price) {
+    transactionDetail.erase(remove(transactionDetail.begin(), transactionDetail.end(), detail), transactionDetail.end());
+    transactionPrice.erase(remove(transactionPrice.begin(), transactionPrice.end(), price), transactionPrice.end());
 }
 
 // 거래 상세내용 벡터 반환
@@ -48,7 +48,7 @@ vector<string> Transaction::GetDetailVector() {
 }
 
 // 거래 가격 벡터 반환
-vector<int> Transaction::GetPriceVector() {
+vector<string> Transaction::GetPriceVector() {
    return transactionPrice;
 }
 
@@ -58,17 +58,16 @@ string Transaction::GetDetailString(int index) {
 }
 
 // index번째 거래 가격 반환
-int Transaction::GetPriceString(int index) {
+string Transaction::GetPriceString(int index) {
     return transactionPrice[index];
 }
 
 //일정 개수 반환
-int Transaction::CountSchedule() {
+int Transaction::CountTransaction() {
     return transactionDetail.size();
 }
 
 //일정이 비어있는지 확인
-bool Transaction::EmptySchedule() {
+bool Transaction::EmptyTransaction() {
     return transactionDetail.empty();
 }
-*/

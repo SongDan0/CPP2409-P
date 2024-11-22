@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -32,29 +33,29 @@ private:
     // 거래 상세내용 벡터
     vector<string> transactionDetail;
     // 거래 가격 벡터
-    vector<int> transactionPrice;  
+    vector<string> transactionPrice;  
 public: 
     // 거래 내역 추가
     void AddTransaction(string detail, int price);
 
     // 거래 내역 삭제
-    void DelTransaction(string detail, int price);
+    void DelTransaction(string detail, string price);
 
     // 거래 상세내용 벡터 반환
     vector<string> GetDetailVector();
 
     // 거래 가격 벡터 반환
-    vector<int> GetPriceVector();
+    vector<string> GetPriceVector();
 
     // index번째 거래 상세내용 반환
     string GetDetailString(int index);
 
     // index번째 거래 가격 반환
-    int GetPriceString(int index);
+    string GetPriceString(int index);
 
-    //일정 개수 반환
-    int CountSchedule();
+    // 거래 개수 반환
+    int CountTransaction();
 
-    //일정이 비어있는지 확인
-    bool EmptySchedule();
+    // 거래이 비어있는지 확인
+    bool EmptyTransaction();
 };

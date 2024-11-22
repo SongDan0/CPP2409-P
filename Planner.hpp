@@ -1,3 +1,4 @@
+#pragma once
 #include "DataManagement.hpp"
 
 class Planner {
@@ -23,5 +24,4 @@ public:
 
     // 메뉴
     void Menu() ;
-
 };
