@@ -1,7 +1,10 @@
 #include "Planner.hpp"
 
-class Calendar: public Date{
+class Calendar {
 private:
+    DataManagement* bd;
+    Schedule*** date;
+    int current_year, current_month, current_day;
     Planner* plan;
 public:
     //생성자(Date 생성자 호출)

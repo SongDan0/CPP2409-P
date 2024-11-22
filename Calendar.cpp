@@ -1,14 +1,19 @@
 #include "Calendar.hpp"
 
 // 생성자(달력 해당 연도만 할당)
-Calendar::Calendar(): Date("config_c", "schedule_c") {
+Calendar::Calendar() {
+    bd = &DataManagement::GetInstance();
+    date = bd->GetArrayCalendar();
+    current_year = bd->current_year;
+    current_month = bd->current_month;
+    current_day = bd->current_day;
     plan = new Planner{};
 }
 
 // 캘린더 일정 추가
 void Calendar::AddSchedule(int year_s, int month_s, int day_s, int year_e, int month_e, int day_e, string detail){
     // 날짜 유효성 체크(유효하지 않으면 함수 종료)
-    if(!CheckRange(year_s, month_s, day_s) || !CheckRange(year_e, month_e, day_e)) {
+    if(!bd->CheckRange(year_s, month_s, day_s) || !bd->CheckRange(year_e, month_e, day_e)) {
         cout << "날짜가 유효하지 않습니다.";
         return;
     }
@@ -21,12 +26,12 @@ void Calendar::AddSchedule(int year_s, int month_s, int day_s, int year_e, int m
 }
 
     // 프로그램 시작 시 일정이 있는 날짜까지만 할당하기 위해 변수값 변경 및 달력 할당 여부 판단하여 할당
-    if(max_year_index < year_e - initial_year) {
-        for(; year_index < year_e - initial_year; max_year_index++) {
-            AddYear();
+    if(bd->max_year_index < year_e - bd->initial_year) {
+        for(; bd->year_index < year_e - bd->initial_year; bd->max_year_index++) {
+            bd->AddYear();
         }
         // 프로그램 시작 시 일정이 있는 날짜까지만 할당하기 위해 변수값 변경
-        max_year_index = year_e - initial_year;
+        bd->max_year_index = year_e - bd->initial_year;
     }
 
     //일정 추가
@@ -34,53 +39,53 @@ void Calendar::AddSchedule(int year_s, int month_s, int day_s, int year_e, int m
         if(month_s == month_e) {
             //시작와 끝의 연도, 월이 같을 경우
             for(int d = day_s-1; d < day_e; d++) {
-                date[year_s - initial_year][month_s-1][d].AddSchedule(detail);
+                date[year_s - bd->initial_year][month_s-1][d].AddSchedule(detail);
             }
         }
         else {
             //시작과 끝의 연도가 같고 월이 다를 경우
-            for(int d = day_s-1; d < kDaysLeafYear[month_s-1]; d++)                     //시작 달
-                date[year_s - initial_year][month_s-1][d].AddSchedule(detail);
+            for(int d = day_s-1; d < bd->kDaysLeafYear[month_s-1]; d++)                     //시작 달
+                date[year_s - bd->initial_year][month_s-1][d].AddSchedule(detail);
             for(int m = month_s; m < month_e - 1; m++) {                                //중간 달
-                for(int d = 0;  d < kDaysLeafYear[m]; d++)
-                    date[year_s - initial_year][m][d].AddSchedule(detail);
+                for(int d = 0;  d < bd->kDaysLeafYear[m]; d++)
+                    date[year_s - bd->initial_year][m][d].AddSchedule(detail);
             }
             for(int d = 0; d < day_e; d++)                                              //끝 달
-                date[year_s - initial_year][month_e-1][d].AddSchedule(detail);
+                date[year_s - bd->initial_year][month_e-1][d].AddSchedule(detail);
         }
     }
     else {
         //시작과 끝의 연도가 다를 경우
         //시작 연도
-        for(int d = day_s-1; d < kDaysLeafYear[month_s-1]; d++)                         //시작 연도의 시작 달
-            date[year_s - initial_year][month_s-1][d].AddSchedule(detail);
-        for(int m = month_s; m < MAX_MONTHS; m++) {                                     //시작 연도의 나머지 달
-            for(int d = 0;  d < kDaysLeafYear[m]; d++)
-                date[year_s - initial_year][m][d].AddSchedule(detail);
+        for(int d = day_s-1; d < bd->kDaysLeafYear[month_s-1]; d++)                         //시작 연도의 시작 달
+            date[year_s - bd->initial_year][month_s-1][d].AddSchedule(detail);
+        for(int m = month_s; m < bd->MAX_MONTHS; m++) {                                     //시작 연도의 나머지 달
+            for(int d = 0;  d < bd->kDaysLeafYear[m]; d++)
+                date[year_s - bd->initial_year][m][d].AddSchedule(detail);
         }
         //중간 연도
-        for(int y = year_s - initial_year + 1; y < year_e - initial_year; y++){         //중간 연도의 전체
-            for(int m = 0; m < MAX_MONTHS; m++) {
-                for(int d = 0; d < kDaysLeafYear[m]; d++)
+        for(int y = year_s - bd->initial_year + 1; y < year_e - bd->initial_year; y++){         //중간 연도의 전체
+            for(int m = 0; m < bd->MAX_MONTHS; m++) {
+                for(int d = 0; d < bd->kDaysLeafYear[m]; d++)
                     date[y][m][d].AddSchedule(detail);
             }
         }
         //마지막 연도
             for(int m = 0; m < month_e - 1; m++) {                                      //마지막 연도의 마지막 달 전까지의 달
-                for(int d = 0;  d < kDaysLeafYear[m]; d++)
-                    date[year_e - initial_year][m][d].AddSchedule(detail);
+                for(int d = 0;  d < bd->kDaysLeafYear[m]; d++)
+                    date[year_e - bd->initial_year][m][d].AddSchedule(detail);
             }
             for(int d = 0; d < day_e; d++)                                              //마지막 연도의 끝 달
-                date[year_e - initial_year][month_e-1][d].AddSchedule(detail);
+                date[year_e - bd->initial_year][month_e-1][d].AddSchedule(detail);
         }
-    SaveToFile("schedule_c");
-    SaveConfig("config_c");
+    bd->SaveToFile();
+    bd->SaveConfig();
 }
 
 // 캘린더 일정 삭제
 void Calendar::DelSchedule(int year_s, int month_s, int day_s, int year_e, int month_e, int day_e, string detail) {
     // 날짜 유효성 체크(유효하지 않으면 함수 종료)
-    if(!CheckRange(year_s, month_s, day_s) || !CheckRange(year_e, month_e, day_e)) {
+    if(!bd->CheckRange(year_s, month_s, day_s) || !bd->CheckRange(year_e, month_e, day_e)) {
         cout << "날짜가 유효하지 않습니다.";
         return;
     }
@@ -93,77 +98,77 @@ void Calendar::DelSchedule(int year_s, int month_s, int day_s, int year_e, int m
 }
 
     //끝 연도가 할당된 연도보다 범위가 클 경우 할당된 범위로 변경
-    if(year_e - initial_year > max_year_index)
-        year_e = max_year_index + initial_year;
+    if(year_e - bd->initial_year > bd->max_year_index)
+        year_e = bd->max_year_index + bd->initial_year;
 
     //일정 삭제
     if(year_s == year_e) {
         if(month_s == month_e) {
             //시작와 끝의 연도, 월이 같을 경우
             for(int d = day_s-1; d < day_e; d++) {
-                date[year_s - initial_year][month_s-1][d].DelSchedule(detail);
+                date[year_s - bd->initial_year][month_s-1][d].DelSchedule(detail);
             }
         }
         else {
             //시작과 끝의 연도가 같고 월이 다를 경우
-            for(int d = day_s-1; d < kDaysLeafYear[month_s-1]; d++)                     //시작 달
-                date[year_s - initial_year][month_s-1][d].DelSchedule(detail);
+            for(int d = day_s-1; d < bd->kDaysLeafYear[month_s-1]; d++)                     //시작 달
+                date[year_s - bd->initial_year][month_s-1][d].DelSchedule(detail);
             for(int m = month_s; m < month_e - 1; m++) {                                //중간 달
-                for(int d = 0;  d < kDaysLeafYear[m]; d++)
-                    date[year_s - initial_year][m][d].DelSchedule(detail);
+                for(int d = 0;  d < bd->kDaysLeafYear[m]; d++)
+                    date[year_s - bd->initial_year][m][d].DelSchedule(detail);
             }
             for(int d = 0; d < day_e; d++)                                              //끝 달
-                date[year_s - initial_year][month_e-1][d].DelSchedule(detail);
+                date[year_s - bd->initial_year][month_e-1][d].DelSchedule(detail);
         }
     }
     else {
         //시작과 끝의 연도가 다를 경우
         //시작 연도
-        for(int d = day_s-1; d < kDaysLeafYear[month_s-1]; d++)                         //시작 연도의 시작 달
-                date[year_s - initial_year][month_s-1][d].DelSchedule(detail);
-        for(int m = month_s; m < MAX_MONTHS; m++) {                                     //시작 연도의 나머지 달
-            for(int d = 0;  d < kDaysLeafYear[m]; d++)
-                date[year_s - initial_year][m][d].DelSchedule(detail);
+        for(int d = day_s-1; d < bd->kDaysLeafYear[month_s-1]; d++)                         //시작 연도의 시작 달
+                date[year_s - bd->initial_year][month_s-1][d].DelSchedule(detail);
+        for(int m = month_s; m < bd->MAX_MONTHS; m++) {                                     //시작 연도의 나머지 달
+            for(int d = 0;  d < bd->kDaysLeafYear[m]; d++)
+                date[year_s - bd->initial_year][m][d].DelSchedule(detail);
         }
         //중간 연도
-        for(int y = year_s - initial_year + 1; y < year_e - initial_year; y++){         //중간 연도의 전체
-            for(int m = 0; m < MAX_MONTHS; m++) {
-                for(int d = 0; d < kDaysLeafYear[m]; d++)
+        for(int y = year_s - bd->initial_year + 1; y < year_e - bd->initial_year; y++){         //중간 연도의 전체
+            for(int m = 0; m < bd->MAX_MONTHS; m++) {
+                for(int d = 0; d < bd->kDaysLeafYear[m]; d++)
                     date[y][m][d].DelSchedule(detail);
             }
         }
         //마지막 연도
             for(int m = 0; m < month_e - 1; m++) {                                      //마지막 연도의 마지막 달 전까지의 달
-                for(int d = 0;  d < kDaysLeafYear[m]; d++)
-                    date[year_e - initial_year][m][d].DelSchedule(detail);
+                for(int d = 0;  d < bd->kDaysLeafYear[m]; d++)
+                    date[year_e - bd->initial_year][m][d].DelSchedule(detail);
             }
             for(int d = 0; d < day_e; d++)                                              //마지막 연도의 끝 달
-                date[year_e - initial_year][month_e-1][d].DelSchedule(detail);
+                date[year_e - bd->initial_year][month_e-1][d].DelSchedule(detail);
     }
-    SaveToFile("schedule_c");
-    SaveConfig("config_c");
+    bd->SaveToFile();
+    bd->SaveConfig();
 }
 
 // 캘린더 표시
 void Calendar::PrintCalendar(int year, int month, int day) {
     system("cls");
     //날짜 유효한지 체크
-    if(!CheckRange(year, month, day)) {
+    if(!bd->CheckRange(year, month, day)) {
         cout << "날짜가 유효하지 않습니다.";
         return;
     }
 
     //달력 할당 여부 판단하여 할당
-    for(; year_index < year - initial_year;) {
-        AddYear();
+    for(; bd->year_index < year - bd->initial_year;) {
+        bd->AddYear();
     }
     
     //윤년 판단
     const int* kDaysPoint;
-    if(CheckLeapYear(year))
-        kDaysPoint = kDaysLeafYear;
+    if(bd->CheckLeapYear(year))
+        kDaysPoint = bd->kDaysLeafYear;
     else   
-        kDaysPoint = kDays;
+        kDaysPoint = bd->kDays;
 
     //연도, 월 출력
     if(month < 10)
@@ -175,12 +180,12 @@ void Calendar::PrintCalendar(int year, int month, int day) {
     cout << "┌──────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────────────┐" << endl;
     cout << "│      ";
     for(int i = 0; i < 7; i++) 
-        cout << kWeekdays[i] << "      │      ";
+        cout << bd->kWeekdays[i] << "      │      ";
     cout << endl;
     cout << "├──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┤" << endl;
     
     //일 및 일정 출력
-    int index = GetDayOfWeek(year, month, day);
+    int index = bd->GetDayOfWeek(year, month, day);
         for(; day+7 <= kDaysPoint[month-1]; ) {
             if(day == 1) {
                 cout << "│";
@@ -227,9 +232,9 @@ void Calendar::PrintSchedule(int year, int month, int day_s, int day_e, int spac
                 cout << "                  │";
         }
         for(int d = day_s-1; d < day_e; d++) {
-            if(date[year - initial_year][month-1][d].CountSchedule() > i) {
-                cout << date[year - initial_year][month-1][d].GetScheduleString(i);
-                for(int k = date[year - initial_year][month-1][d].GetScheduleString(i).length()*2/3; k < 18; k++) 
+            if(date[year - bd->initial_year][month-1][d].CountSchedule() > i) {
+                cout << date[year - bd->initial_year][month-1][d].GetScheduleString(i);
+                for(int k = date[year - bd->initial_year][month-1][d].GetScheduleString(i).length()*2/3; k < 18; k++) 
                     cout << " ";
                 cout << "│";
             }
