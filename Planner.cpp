@@ -1,57 +1,63 @@
 #include "Planner.hpp"
 
 // 생성자(Date 클래스 생성자 호출)
-Planner::Planner(): Date("config_p", "schedule_p") {}
+Planner::Planner() {
+    bd = &DataManagement::GetInstance();
+    date = bd->GetArrayPlanner();
+    current_year = bd->current_year;
+    current_month = bd->current_month;
+    current_day = bd->current_day;
+}
 
 // 플래너 일정 추가
 void Planner::AddSchedule(string detail){
     // 프로그램 시작 시 일정이 있는 날짜까지만 할당하기 위해 변수값 변경
-    if(max_year_index < current_year - initial_year)
-        max_year_index = current_year-initial_year;
+    if(bd->max_year_index < current_year - bd->initial_year)
+        bd->max_year_index = current_year-bd->initial_year;
     
     // 일정 추가
-    date[current_year-initial_year][current_month][current_day].AddSchedule(detail);
+    date[current_year-bd->initial_year][current_month][current_day].AddSchedule(detail);
     
     // 변경 사항 저장
-    SaveToFile("schedule_p");
-    SaveConfig("config_p");
+    bd->SaveToFile();
+    bd->SaveConfig();
 }
 
 //플래너 일정 삭제
 void Planner::DelSchedule(string detail) {
     // 일정 삭제
-    date[current_year-initial_year][current_month][current_day].DelSchedule(detail);
+    date[current_year-bd->initial_year][current_month][current_day].DelSchedule(detail);
     
     // 변경 사항 저장
-    SaveToFile("schedule_p");
-    SaveConfig("config_p");
+    bd->SaveToFile();
+    bd->SaveConfig();
 }
 
 //플래너 표시
 void Planner::PrintPlanner() {
     // 날짜 유효한지 체크
-    if(!CheckRange(current_year, current_month, current_day)) {
+    if(!bd->CheckRange(current_year, current_month, current_day)) {
         cout << "날짜가 유효하지 않습니다.";
         return;
     }
 
     // 현재 표시할 날짜가 할당이 되어 있는지 체크하고 할당
-    for(; year_index < current_year - initial_year;) {
-        AddYear();
+    for(; bd->year_index < current_year - bd->initial_year;) {
+        bd->AddYear();
     }
     
     // 연도, 월, 일, 요일 출력
     if(current_month < 10) {
         if(current_day < 10)
-            cout << " ──────────" << current_year << ".0" << current_month << ".0" << current_day << "(" << kWeekdays[GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+            cout << " ──────────" << current_year << ".0" << current_month << ".0" << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
         else
-            cout << " ──────────" << current_year << ".0" << current_month << "." << current_day << "(" << kWeekdays[GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+            cout << " ──────────" << current_year << ".0" << current_month << "." << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
     }
     else {
         if(current_day < 10)
-            cout << " ──────────" << current_year << "." << current_month << ".0" << current_day << "(" << kWeekdays[GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+            cout << " ──────────" << current_year << "." << current_month << ".0" << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
         else
-            cout << " ──────────" << current_year << "." << current_month << "." << current_day << "(" << kWeekdays[GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+            cout << " ──────────" << current_year << "." << current_month << "." << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
     }
 
     // 일정 출력
@@ -64,15 +70,15 @@ void Planner::PrintSchedule() {
     cout << "┌────────────────────────────────────────┐" << endl;
     
     // 일정 출력 및 오른쪽 공백 출력
-    for(int i = 0; i < date[current_year-initial_year][current_month][current_day].CountSchedule(); i++) {
-        cout << "│" << date[current_year-initial_year][current_month][current_day].GetScheduleString(i);
-        for(int j = date[current_year-initial_year][current_month][current_day].GetScheduleString(i).length()*2/3; j < 40; j++)
+    for(int i = 0; i < date[current_year-bd->initial_year][current_month][current_day].CountSchedule(); i++) {
+        cout << "│" << date[current_year-bd->initial_year][current_month][current_day].GetScheduleString(i);
+        for(int j = date[current_year-bd->initial_year][current_month][current_day].GetScheduleString(i).length()*2/3; j < 40; j++)
             cout << " ";
         cout << "│" << endl;
     }
     
     // 아래쪽 공백 출력
-    for(int i = date[current_year-initial_year][current_month][current_day].CountSchedule(); i < 24; i++)
+    for(int i = date[current_year-bd->initial_year][current_month][current_day].CountSchedule(); i < 24; i++)
         cout  << "│                                        │" <<endl;
     
     // 아래 경계선 출력
