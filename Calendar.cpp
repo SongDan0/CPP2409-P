@@ -238,7 +238,7 @@ void Calendar::PrintSchedule(int year, int month, int day_s, int day_e, int spac
         for(int d = day_s-1; d < day_e; d++) {
             if(date[year - bd->initial_year][month-1][d].CountSchedule() > i) {
                 cout << date[year - bd->initial_year][month-1][d].GetScheduleString(i);
-                for(int k = date[year - bd->initial_year][month-1][d].GetScheduleString(i).length()*2/3; k < 18; k++) 
+                for(int k = StringLength(date[year - bd->initial_year][month-1][d].GetScheduleString(i)); k < 18; k++) 
                     cout << " ";
                 cout << "│";
             }
@@ -300,9 +300,10 @@ void Calendar::Menu() {
             cin >> year_s >> month_s >> day_s;
             cout << "종료 날짜를 0000 00 00 형태로 연도, 월, 일을 입력해주세요: ";
             cin >> year_e >> month_e >> day_e;
-            cout << "9글자 이내의 한글로 일정을 입력해주세요(띄어쓰기 사용금지): ";
+            cout << "18글자 이내의 일정을 입력해주세요(한글: 2칸, 그 외: 1칸): ";
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, detail);
+            detail = Trim(detail);
             AddSchedule(year_s, month_s, day_s, year_e, month_e, day_e, detail);
             PrintCalendar(year_s, month_s);
         }
@@ -314,9 +315,10 @@ void Calendar::Menu() {
             cin >> year_s >> month_s >> day_s;
             cout << "삭제할 일정의 종료 날짜를 0000 00 00 형태로 연도, 월, 일을 입력해주세요: ";
             cin >> year_e >> month_e >> day_e;
-            cout << "삭제할 일정을 적어주세요: ";
+            cout << "18글자 이내의 일정을 입력해주세요(한글: 2칸, 그 외: 1칸): ";
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, detail);
+            detail = Trim(detail);
             DelSchedule(year_s, month_s, day_s, year_e, month_e, day_e, detail);
             PrintCalendar(year_s, month_s);
         }

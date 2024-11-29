@@ -30,9 +30,9 @@ bool Date::CheckLeapYear(int year) {
 
 // 날짜 유효한지 체크(true: 날짜 유효/ flase: 날짜 유효x)
 bool Date::CheckRange(int year, int month, int day) {
-    if(initial_year <= year && year <= initial_year + 99) { // 연도 체크
-        if(1 <= month  && month <= MAX_MONTHS) {            // 월 체크
-            if (CheckLeapYear(year)){                       // 윤년 판단(일 체크)
+    if(initial_year <= year && year <= initial_year + 99) {     // 연도 체크
+        if(1 <= month  && month <= MAX_MONTHS) {                // 월 체크
+            if (CheckLeapYear(year)){                           // 윤년 판단(일 체크)
                 if(1 <= day && day <= kDaysLeafYear[month-1])     
                     return true;
             }
@@ -52,12 +52,12 @@ int Date::GetDayOfWeek(int year, int month, int day) {
         month += 12;
         year--;
     }
-    int K = year % 100;                                                         // 연도의 마지막 두 자리
-    int J = year / 100;                                                         // 연도의 첫 두 자리
+    int K = year % 100;         // 연도의 마지막 두 자리
+    int J = year / 100;         // 연도의 첫 두 자리
     
     // Zeller의 공식
     int h = (day + (13 * (month + 1)) / 5 + K + K / 4 + J / 4 + 5 * J) % 7;
-    h = (h + 6) % 7;                                                            // h가 음수일 경우 양수로 변환
+    h = (h + 6) % 7;            // h가 음수일 경우 양수로 변환
 
-    return h;                                                                   // 요일 인덱스값 반환
+    return h;                   // 요일 인덱스값 반환
 }

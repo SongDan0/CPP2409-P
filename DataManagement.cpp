@@ -47,7 +47,7 @@ Transaction*** DataManagement::GetArrayAccountBook() {
 void DataManagement::AddYear() {
     // 캘린더
     calendar[++year_index] = new Schedule*[MAX_MONTHS];         // 다음 연도에 대한 월 배열 생성
-    for (int i = 0; i < MAX_MONTHS; i++)                       // 다음 연도의 월에 대한 일 배열 생성
+    for (int i = 0; i < MAX_MONTHS; i++)                        // 다음 연도의 월에 대한 일 배열 생성
         calendar[year_index][i] = new Schedule[MAX_DAYS];  
     
     // 플래너
@@ -56,7 +56,7 @@ void DataManagement::AddYear() {
         planner[year_index][i] = new Schedule[MAX_DAYS];  
 
     // 가계부
-    accountBook[year_index] = new Transaction*[MAX_MONTHS];      // 다음 연도에 대한 월 배열 생성
+    accountBook[year_index] = new Transaction*[MAX_MONTHS];     // 다음 연도에 대한 월 배열 생성
     for (int i = 0; i < MAX_MONTHS; i++)                        // 다음 연도의 월에 대한 일 배열 생성
         accountBook[year_index][i] = new Transaction[MAX_DAYS];  
 }
@@ -66,7 +66,7 @@ void DataManagement::SaveConfig() {
     ofstream configFile("config");                              //config파일을 쓰기 모드로 열기                            
 
     if (configFile.is_open()) {                                 //파일이 정상적으로 열렸을 경우
-        configFile << initial_year << " " << max_year_index;    //intitial_year maxYearIndex 형식으로 저장
+        configFile << initial_year << " " << max_year_index;    //intitial_year maxYearIndex 저장
         configFile.close();                                     //파일 닫기
     } else {
         cout << "설정 파일을 저장할 수 없습니다." << endl;
@@ -75,7 +75,7 @@ void DataManagement::SaveConfig() {
 
 //환경 설정 파일 불러오기
 void DataManagement::LoadConfig() {
-    ifstream configFile("config");                              //config에 저장된 문자열을 이름으로 가진 파일을 읽기 모드로 열기
+    ifstream configFile("config");                              //config파일을 읽기 모드로 열기
 
     if (configFile.is_open()) {                                 //파일이 정상적으로 열렸을 경우
         configFile >> initial_year >> max_year_index;           //intitial_year, maxYearIndex 읽어오기
@@ -90,7 +90,7 @@ void DataManagement::SaveToFile() {
     string fileName[3] = {"CalendarData", "PlannerData", "AccountBookData"};
     // CalendarData, PlannerData 저장
     for(int i = 0; i < 2; i++) {
-        ofstream outFile(fileName[i]);                                     // filename에 저장된 문자열을 이름으로 가진 파일을 파일 쓰기 모드로 열기
+        ofstream outFile(fileName[i]);
         Schedule*** data;
         if(i == 0) 
             data = calendar;
@@ -114,7 +114,7 @@ void DataManagement::SaveToFile() {
                     }
                 }
             }
-            outFile.close();                                            // 파일 닫기
+            outFile.close();   
         }
         //파일이 정상적으로 열리지 않았을 경우
         else {                                                    
@@ -122,8 +122,7 @@ void DataManagement::SaveToFile() {
         }
     }
     // AccountBookData 저장
-    ofstream outFile(fileName[2]);                                     // filename에 저장된 문자열을 이름으로 가진 파일을 파일 쓰기 모드로 열기
-    //파일이 정상적으로 열렸을 경우
+    ofstream outFile(fileName[2]);    
     if (outFile.is_open()) {
         for (int y = 0; y <= max_year_index; ++y) {                                               
             for (int m = 0; m < MAX_MONTHS; ++m) {
@@ -142,7 +141,7 @@ void DataManagement::SaveToFile() {
                 }
             }
         }
-        outFile.close();                                            // 파일 닫기
+        outFile.close();                                     
     }
     //파일이 정상적으로 열리지 않았을 경우
     else {                                                    
@@ -155,7 +154,7 @@ void DataManagement::LoadFromFile() {
     string fileName[3] = {"CalendarData", "PlannerData", "AccountBookData"};
     // CalendarData, PlannerData 불러오기
     for(int i = 0; i < 2; i++) {
-        ifstream inFile(fileName[i]);                                          // filename에 저장된 문자열을 이름으로 가진 파일을 파일 읽기 모드로 열기
+        ifstream inFile(fileName[i]);                                         
         Schedule*** data;
         if(i == 0) 
             data = calendar;
@@ -173,7 +172,7 @@ void DataManagement::LoadFromFile() {
                 data[year-initial_year][month - 1][day - 1].AddSchedule(detail); // 읽어온 일정 추가
             }
 
-            inFile.close();                                                 //파일 닫기
+            inFile.close();                                               
         }
         //파일이 정상적으로 열리지 않았을 경우 
         else {
@@ -182,21 +181,20 @@ void DataManagement::LoadFromFile() {
     }
 
     // AccountBookData 불러오기
-    ifstream inFile(fileName[2]);                                          // filename에 저장된 문자열을 이름으로 가진 파일을 파일 읽기 모드로 열기
-
+    ifstream inFile(fileName[2]);                                      
     //파일이 정상적으로 열렸을 경우
     if (inFile.is_open()) {
         int year, month, day, price;                                    // 날짜 정보를 저장할 변수              
         string detail;                                                  // 일정을 저장할 변수
 
         // 파일에서 한 줄씩 읽으면서 연도, 월, 일, 세부 내용을 처리
-        while (inFile >> year >> month >> day >> price) {                        // 연도, 월, 일 읽어오기 
+        while (inFile >> year >> month >> day >> price) {               // 연도, 월, 일 읽어오기 
             inFile.ignore();                                            // 한 칸 건너띄어 공백 무기
             getline(inFile, detail);                                    // 일정 읽어오기
             accountBook[year-initial_year][month - 1][day - 1].AddTransaction(detail, price); // 읽어온 일정 추가
         }
 
-        inFile.close();                                                 //파일 닫기
+        inFile.close();                                              
     }
     //파일이 정상적으로 열리지 않았을 경우 
     else {

@@ -48,16 +48,32 @@ void Planner::PrintPlanner() {
     
     // 연도, 월, 일, 요일 출력
     if(current_month < 10) {
-        if(current_day < 10)
-            cout << " ──────────" << current_year << ".0" << current_month << ".0" << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
-        else
-            cout << " ──────────" << current_year << ".0" << current_month << "." << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+        if(current_day < 10) {
+            cout << " ──────────" << current_year 
+            << ".0" << current_month 
+            << ".0" << current_day 
+            << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+        }
+        else {
+            cout << " ──────────" << current_year 
+            << ".0" << current_month 
+            << "." << current_day 
+            << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+        }
     }
     else {
-        if(current_day < 10)
-            cout << " ──────────" << current_year << "." << current_month << ".0" << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
-        else
-            cout << " ──────────" << current_year << "." << current_month << "." << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+        if(current_day < 10) {
+            cout << " ──────────" << current_year 
+            << "." << current_month 
+            << ".0" << current_day 
+            << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+        }
+        else {
+            cout << " ──────────" << current_year 
+            << "." << current_month 
+            << "." << current_day 
+            << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+        }
     }
 
     // 일정 출력

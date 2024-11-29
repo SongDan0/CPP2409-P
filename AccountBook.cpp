@@ -57,15 +57,31 @@ void AccountBook::PrintAccountBook() {
     // 연도, 월, 일, 요일 출력
     if(current_month < 10) {
         if(current_day < 10)
-            cout << " ──────────" << current_year << ".0" << current_month << ".0" << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+            cout << " ──────────" << current_year 
+            << ".0" << current_month 
+            << ".0" << current_day 
+            << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] 
+            << ")────────────" << endl;
         else
-            cout << " ──────────" << current_year << ".0" << current_month << "." << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+            cout << " ──────────" << current_year 
+            << ".0" << current_month 
+            << "." << current_day 
+            << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] 
+            << ")────────────" << endl;
     }
     else {
         if(current_day < 10)
-            cout << " ──────────" << current_year << "." << current_month << ".0" << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+            cout << " ──────────" << current_year 
+            << "." << current_month 
+            << ".0" << current_day 
+            << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] 
+            << ")────────────" << endl;
         else
-            cout << " ──────────" << current_year << "." << current_month << "." << current_day << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] << ")────────────" << endl;
+            cout << " ──────────" << current_year 
+            << "." << current_month 
+            << "." << current_day 
+            << "(" << Date::kWeekdays[bd->GetDayOfWeek(current_year, current_month, current_day)] 
+            << ")────────────" << endl;
     }
 
     // 내역 출력
@@ -79,8 +95,11 @@ void AccountBook::PrintTransaction() {
     
     // 일정 출력 및 오른쪽 공백 출력
     for(int i = 0; i < date[current_year-bd->initial_year][current_month-1][current_day-1].CountTransaction(); i++) {
-        cout << "│" << date[current_year-bd->initial_year][current_month-1][current_day-1].GetDetailString(i) << " " << date[current_year-bd->initial_year][current_month-1][current_day-1].GetPriceString(i) << "원";
-        for(int j = StringLength(date[current_year-bd->initial_year][current_month-1][current_day-1].GetDetailString(i)) + date[current_year-bd->initial_year][current_month-1][current_day-1].GetPriceString(i).length(); j < 37; j++)
+        cout << "│" << date[current_year-bd->initial_year][current_month-1][current_day-1].GetDetailString(i) << " " 
+        << date[current_year-bd->initial_year][current_month-1][current_day-1].GetPriceString(i) << "원";
+        int j = StringLength(date[current_year-bd->initial_year][current_month-1][current_day-1].GetDetailString(i));
+        j += date[current_year-bd->initial_year][current_month-1][current_day-1].GetPriceString(i).length();
+        for(; j < 37; j++)
             cout << " ";
         cout << "│" << endl;
     }
@@ -121,7 +140,7 @@ void AccountBook::Menu() {
         else if(input == "거래내역추가") {
             string detail;
             int price;
-            cout << "30글자 이내로 일정을 입력해주세요(한글: 2칸, 그 외: 1칸): ";
+            cout << "30글자 이내로 거래 내역을 입력해주세요(한글: 2칸, 그 외: 1칸): ";
             getline(cin, detail);
             cout << "9글자 이내의 거래 가격을 입력해주세요: ";
             cin >> price;
@@ -135,7 +154,7 @@ void AccountBook::Menu() {
         else if(input == "거래내역삭제") {
             string detail;
             int price;
-            cout << "30글자 이내로 일정을 입력해주세요(한글: 2칸, 그 외: 1칸): ";
+            cout << "30글자 이내로 거래 내역을 입력해주세요(한글: 2칸, 그 외: 1칸): ";
             getline(cin, detail);
             cout << "9글자 이내의 거래 가격을 입력해주세요: ";
             cin >> price;

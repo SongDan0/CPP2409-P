@@ -7,9 +7,9 @@
 
 class DataManagement: public Date {
 private:
-    Schedule*** calendar = nullptr;           // 날짜별 Schedule 객체를 담을 3차원 배열의 포인터
-    Schedule*** planner = nullptr;            // 날짜별 Schedule 객체를 담을 3차원 배열의 포인터   
-    Transaction*** accountBook;     // 날짜별 Schedule 객체를 담을 3차원 배열의 포인터   
+    Schedule*** calendar;           // 날짜별 Schedule 객체를 담을 3차원 배열의 포인터
+    Schedule*** planner;            // 날짜별 Schedule 객체를 담을 3차원 배열의 포인터   
+    Transaction*** accountBook;     // 날짜별 Transaction 객체를 담을 3차원 배열의 포인터   
 
     // 생성자(Date 생성자 호출, 연도 단위 날짜 할당, 환경 설정 파일 가져오기)(Singleton)
     DataManagement();
