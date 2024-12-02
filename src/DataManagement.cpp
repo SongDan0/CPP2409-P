@@ -86,7 +86,9 @@ void DataManagement::LoadConfig() {
 
 // 데이터 파일 저장
 void DataManagement::SaveToFile() {
-    string fileName[3] = {"CalendarData", "PlannerData", "AccountBookData"};
+    string fileName[3] = {"../storage/CalendarData",
+        "../storage/PlannerData", 
+        "../storage/AccountBookData"};
     // CalendarData, PlannerData 저장
     for(int i = 0; i < 2; i++) {
         ofstream outFile(fileName[i]);
@@ -150,7 +152,9 @@ void DataManagement::SaveToFile() {
 
 // 파일에서 데이터를 불러오기
 void DataManagement::LoadFromFile() {
-    string fileName[3] = {"CalendarData", "PlannerData", "AccountBookData"};
+    string fileName[3] = {"../storage/CalendarData",
+        "../storage/PlannerData",
+        "../storage/AccountBookData"};
     // CalendarData, PlannerData 불러오기
     for(int i = 0; i < 2; i++) {
         ifstream inFile(fileName[i]);                                         
