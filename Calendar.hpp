@@ -4,11 +4,11 @@
 
 class Calendar {
 private:
-    DataManagement* bd;
+    DataManagement* dm;
     Schedule*** date;
     int current_year, current_month, current_day;
     Planner* plan;
-    AccountBook* accountBook;
+    AccountBook* account_book;
 public:
     //생성자(Date 생성자 호출)
     Calendar();
@@ -27,6 +27,9 @@ public:
 
     // 가계부 일의 합계 출력
     void PrintTotle(int year, int month, int day_s, int day_e, int space_position = 0);
+
+    // 분리선 출력
+    void PrintLine();
 
     //메뉴
     void Menu() ;

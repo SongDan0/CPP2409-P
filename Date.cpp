@@ -1,13 +1,12 @@
 #include "Date.hpp"
 
-
-//static const 변수 초기화
+// static const 변수 초기화
 const int Date::MAX_YEARS = 100;                                                 
 const int Date::MAX_MONTHS = 12;                                                           
 const int Date::MAX_DAYS = 31;                                            
-const int Date::kDays[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
-const int Date::kDaysLeafYear[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-const string Date::kWeekdays[7] = {"일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"};
+const int Date::DAYS[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
+const int Date::DAYS_LEAF_YEAR[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const string Date::WEEKDAYS[7] = {"일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"};
 
 // 생성자(현재 시간 저장, 연도 단위 날짜 할달, 환경 설정 파일 가져오기)
 Date::Date() {
@@ -33,11 +32,11 @@ bool Date::CheckRange(int year, int month, int day) {
     if(initial_year <= year && year <= initial_year + 99) {     // 연도 체크
         if(1 <= month  && month <= MAX_MONTHS) {                // 월 체크
             if (CheckLeapYear(year)){                           // 윤년 판단(일 체크)
-                if(1 <= day && day <= kDaysLeafYear[month-1])     
+                if(1 <= day && day <= DAYS_LEAF_YEAR[month-1])     
                     return true;
             }
             else {
-                if(1 <= day && day <= kDays[month-1])
+                if(1 <= day && day <= DAYS[month-1])
                     return true;
             }
         }

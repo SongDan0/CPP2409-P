@@ -16,46 +16,46 @@ public:
     void DelSchedule(string detail);
 
     // 일정vector 반환
-    vector<string> GetScheduleVector();
+    vector<string> GetSchedule();
 
     // index번째 일정 반환
-    string GetScheduleString(int index);
+    string GetSchedule(int index);
 
-    // 일정 개수 반환
+    // 일정 개수 개수 반환
     int CountSchedule();
 
     // 일정이 비어있는지 확인
-    bool EmptySchedule();
+    bool IsEmpty();
 };
 
 class Transaction {
 private:    
-    // 거래 상세내용 벡터
-    vector<string> transactionDetail;
-    // 거래 가격 벡터
-    vector<string> transactionPrice;  
+    // 거래내용 벡터
+    vector<string> transaction_detail;
+    // 거래가격 벡터
+    vector<string> transaction_price;  
 public: 
-    // 거래 내역 추가
+    // 거래내역 추가
     void AddTransaction(string detail, int price);
 
-    // 거래 내역 삭제
+    // 거래내역 삭제
     void DelTransaction(string detail, string price);
 
-    // 거래 상세내용 벡터 반환
-    vector<string> GetDetailVector();
+    // 거래내용 vector 반환
+    vector<string> GetDetail();
 
-    // 거래 가격 벡터 반환
-    vector<string> GetPriceVector();
+    // 거래가격 vector 반환
+    vector<string> GetPrice();
 
-    // index번째 거래 상세내용 반환
-    string GetDetailString(int index);
+    // index번째 거래내용 반환
+    string GetDetail(int index);
 
-    // index번째 거래 가격 반환
-    string GetPriceString(int index);
+    // index번째 거래가격 반환
+    string GetPrice(int index);
 
-    // 거래 개수 반환
+    // 거래내역 개수 반환
     int CountTransaction();
 
-    // 거래이 비어있는지 확인
-    bool EmptyTransaction();
+    // 거래내역이 비어있는지 확인
+    bool IsEmpty();
 };

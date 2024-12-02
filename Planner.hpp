@@ -3,7 +3,7 @@
 
 class Planner {
 private:
-    DataManagement* bd;                             // DataManagement 포인터
+    DataManagement* dm;                             // DataManagement 포인터
     Schedule*** date;                               // 날짜별 Schedule 객체를 담을 3차원 배열의 포인터
     int current_year, current_month, current_day;   // 현재 작업 중인 날짜 저장하는 변수
 public:

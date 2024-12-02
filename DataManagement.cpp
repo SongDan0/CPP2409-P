@@ -1,4 +1,3 @@
-
 #include "DataManagement.hpp"
 
 // 생성자(현재 시간 저장, 연도 단위 날짜 할달, 환경 설정 파일 가져오기)
@@ -13,34 +12,34 @@ DataManagement::DataManagement(): Date() {
 
     calendar = new Schedule**[MAX_YEARS];
     planner = new Schedule**[MAX_YEARS];
-    accountBook = new Transaction**[MAX_YEARS];
+    account_book = new Transaction**[MAX_YEARS];
     while(year_index < max_year_index){
         AddYear();
     }  
 
-    //일정 불러오기
+    // 일정 불러오기
     LoadFromFile();
 }
 
 // 싱글턴 객체 반환
  DataManagement& DataManagement::GetInstance() {
-    static DataManagement instance;  // 메서드 내부에서 static 인스턴스 생성
+    static DataManagement instance;     // 메서드 내부에서 static 인스턴스 생성
     return instance;
 }
 
-//calendar배열 반환
+// calendar배열 반환
 Schedule*** DataManagement::GetArrayCalendar() {
     return calendar;
 }
 
-//planner배열 반환
+// planner배열 반환
 Schedule*** DataManagement::GetArrayPlanner() {
     return planner;
 }
     
-//accountBook배열 반환
+// account_book배열 반환
 Transaction*** DataManagement::GetArrayAccountBook() {
-    return accountBook;
+    return account_book;
 }
 
 // 달력 범위 1년 증가(다음 연도 할당)
@@ -56,9 +55,9 @@ void DataManagement::AddYear() {
         planner[year_index][i] = new Schedule[MAX_DAYS];  
 
     // 가계부
-    accountBook[year_index] = new Transaction*[MAX_MONTHS];     // 다음 연도에 대한 월 배열 생성
-    for (int i = 0; i < MAX_MONTHS; i++)                        // 다음 연도의 월에 대한 일 배열 생성
-        accountBook[year_index][i] = new Transaction[MAX_DAYS];  
+    account_book[year_index] = new Transaction*[MAX_MONTHS];     // 다음 연도에 대한 월 배열 생성
+    for (int i = 0; i < MAX_MONTHS; i++)                         // 다음 연도의 월에 대한 일 배열 생성
+        account_book[year_index][i] = new Transaction[MAX_DAYS];  
 }
 
 //환경 설정 파일 저장
@@ -69,7 +68,7 @@ void DataManagement::SaveConfig() {
         configFile << initial_year << " " << max_year_index;    //intitial_year maxYearIndex 저장
         configFile.close();                                     //파일 닫기
     } else {
-        cout << "설정 파일을 저장할 수 없습니다." << endl;
+        cerr << "설정 파일을 저장할 수 없습니다." << endl;
     }
 }
 
@@ -102,9 +101,9 @@ void DataManagement::SaveToFile() {
                 for (int m = 0; m < MAX_MONTHS; ++m) {
                     for (int d = 0; d < MAX_DAYS; ++d) {
                         // 해당 날짜의 일정이 비어있지 않다면 저장
-                        if (!data[y][m][d].EmptySchedule()) {
+                        if (!data[y][m][d].IsEmpty()) {
                             // year month day schedule 형태로 저장
-                            for (const string& schedule : data[y][m][d].GetScheduleVector()) {          
+                            for (const string& schedule : data[y][m][d].GetSchedule()) {          
                                 outFile << (initial_year + y) << " "    // Year
                                         << (m + 1) << " "               // Month
                                         << (d + 1) << " "               // Day
@@ -118,7 +117,7 @@ void DataManagement::SaveToFile() {
         }
         //파일이 정상적으로 열리지 않았을 경우
         else {                                                    
-            cout << "파일을 열 수 없습니다." << endl;
+            cerr << "파일을 열 수 없습니다." << endl;
         }
     }
     // AccountBookData 저장
@@ -128,14 +127,14 @@ void DataManagement::SaveToFile() {
             for (int m = 0; m < MAX_MONTHS; ++m) {
                 for (int d = 0; d < MAX_DAYS; ++d) {
                     // 해당 날짜의 일정이 비어있지 않다면 저장
-                    if (!accountBook[y][m][d].EmptyTransaction()) {
+                    if (!account_book[y][m][d].IsEmpty()) {
                         // year month day schedule 형태로 저장
-                        for (int i = 0; i < accountBook[y][m][d].CountTransaction(); i++) {          
+                        for (int i = 0; i < account_book[y][m][d].CountTransaction(); i++) {          
                             outFile << (initial_year + y) << " "    // Year
                                     << (m + 1) << " "               // Month
                                     << (d + 1) << " "               // Day
-                                    << accountBook[y][m][d].GetPriceString(i) << " "      // Transaction Price
-                                    << accountBook[y][m][d].GetDetailString(i) << "\n";   // Transaction Detail
+                                    << account_book[y][m][d].GetPrice(i) << " "      // Transaction Price
+                                    << account_book[y][m][d].GetDetail(i) << "\n";   // Transaction Detail
                         }
                     }
                 }
@@ -144,8 +143,8 @@ void DataManagement::SaveToFile() {
         outFile.close();                                     
     }
     //파일이 정상적으로 열리지 않았을 경우
-    else {                                                    
-        cout << "파일을 열 수 없습니다." << endl;
+    else {                                
+        cerr << "파일을 열 수 없습니다." << endl;
     }
 }
 
@@ -176,7 +175,7 @@ void DataManagement::LoadFromFile() {
         }
         //파일이 정상적으로 열리지 않았을 경우 
         else {
-            cout << "파일을 열 수 없습니다." << endl;
+            cout << "읽어올 데이터 파일이 없습니다." << endl;
         }
     }
 
@@ -191,14 +190,14 @@ void DataManagement::LoadFromFile() {
         while (inFile >> year >> month >> day >> price) {               // 연도, 월, 일 읽어오기 
             inFile.ignore();                                            // 한 칸 건너띄어 공백 무기
             getline(inFile, detail);                                    // 일정 읽어오기
-            accountBook[year-initial_year][month - 1][day - 1].AddTransaction(detail, price); // 읽어온 일정 추가
+            account_book[year-initial_year][month - 1][day - 1].AddTransaction(detail, price); // 읽어온 일정 추가
         }
 
         inFile.close();                                              
     }
     //파일이 정상적으로 열리지 않았을 경우 
     else {
-        cout << "파일을 열 수 없습니다." << endl;
+        cout << "읽어올 데이터 파일이 없습니다." << endl;
     }
 
 }
@@ -210,7 +209,7 @@ string Trim(const string& str) {
     return regex_replace(str, ws_re, "");
 }
 
-// 문자열 길이 반환 함수
+// 문자열의 출력 길이 반환하는 함수
 int StringLength(const string& str) {
     int count_ascii = 0;
     int count_korean = 0;

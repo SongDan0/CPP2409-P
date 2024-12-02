@@ -7,16 +7,18 @@ void Schedule::AddSchedule(string detail) {
 
 // 일정 삭제
 void Schedule::DelSchedule(string detail) {
-    schedule.erase(remove(schedule.begin(), schedule.end(), detail), schedule.end());
+    schedule.erase(
+        remove(schedule.begin(), schedule.end(), detail), 
+        schedule.end());
 }
 
 // 일정vector 반환
-vector<string> Schedule::GetScheduleVector() {
+vector<string> Schedule::GetSchedule() {
     return schedule;
 }
 
 // index번째 일정 반환
-string Schedule::GetScheduleString(int index) {
+string Schedule::GetSchedule(int index) {
     return schedule[index];
 }
 
@@ -26,48 +28,52 @@ int Schedule::CountSchedule() {
 }
 
 // 일정이 비어있는지 확인
-bool Schedule::EmptySchedule() {
+bool Schedule::IsEmpty() {
     return schedule.empty();
 }
 
-//거래 내역 추가
+// 거래내역 추가
 void Transaction::AddTransaction(string detail, int price) {
-    transactionDetail.push_back(detail);
-    transactionPrice.push_back(to_string(price));
+    transaction_detail.push_back(detail);
+    transaction_price.push_back(to_string(price));
 }
 
-// 거래 내역 삭제
+// 거래내역 삭제
 void Transaction::DelTransaction(string detail, string price) {
-    transactionDetail.erase(remove(transactionDetail.begin(), transactionDetail.end(), detail), transactionDetail.end());
-    transactionPrice.erase(remove(transactionPrice.begin(), transactionPrice.end(), price), transactionPrice.end());
+    transaction_detail.erase(
+        remove(transaction_detail.begin(), transaction_detail.end(), detail), 
+        transaction_detail.end());
+    transaction_price.erase(
+        remove(transaction_price.begin(), transaction_price.end(), price), 
+        transaction_price.end());
 }
 
-// 거래 상세내용 벡터 반환
-vector<string> Transaction::GetDetailVector() {
-   return transactionDetail;
+// 거래내용 vector 반환
+vector<string> Transaction::GetDetail() {
+    return transaction_detail;
 }
 
-// 거래 가격 벡터 반환
-vector<string> Transaction::GetPriceVector() {
-   return transactionPrice;
+// 거래가격 vector 반환
+vector<string> Transaction::GetPrice() {
+    return transaction_price;
 }
 
-// index번째 거래 상세내용 반환
-string Transaction::GetDetailString(int index) {
-    return transactionDetail[index];
+// index번째 거래내용 반환
+string Transaction::GetDetail(int index) {
+    return transaction_detail[index];
 }
 
-// index번째 거래 가격 반환
-string Transaction::GetPriceString(int index) {
-    return transactionPrice[index];
+// index번째 거래가격 반환
+string Transaction::GetPrice(int index) {
+    return transaction_price[index];
 }
 
-//일정 개수 반환
+// 거래내역 개수 반환
 int Transaction::CountTransaction() {
-    return transactionDetail.size();
+    return transaction_detail.size();
 }
 
-//일정이 비어있는지 확인
-bool Transaction::EmptyTransaction() {
-    return transactionDetail.empty();
+// 거래내역이 비어있는지 확인
+bool Transaction::IsEmpty() {
+    return transaction_detail.empty();
 }
