@@ -15,8 +15,8 @@ Date::Date() {
     tm* now = localtime(&t);             // 현재 시간을 tm 구조체 포인터로 변환
 
     // 현재 년, 월, 일을 변수에 저장
-    current_year = now->tm_year + 1900;  // tm_year는 1900년부터 시작하므로 1900을 더해 실제 연도 계산
-    current_month = now->tm_mon + 1;     // tm_mon은 0부터 시작하므로 1을 더해 실제 월 계산
+    current_year = now->tm_year + 1900;  // tm_year(1900년 시작)/ 실제 연도 계산
+    current_month = now->tm_mon + 1;     // tm_mon(0 시작)/ 1을 더해 실제 월 계산
     current_day = now->tm_mday;          // 오늘의 일(day)
 }
 

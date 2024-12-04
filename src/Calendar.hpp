@@ -1,6 +1,7 @@
 #pragma once
 #include "Planner.hpp"
 #include "AccountBook.hpp"
+#include  "Note.hpp"
 
 class Calendar {
 private:
@@ -9,6 +10,8 @@ private:
     int current_year, current_month, current_day;
     Planner* plan;
     AccountBook* account_book;
+    Note* note;
+    
 public:
     //생성자(Date 생성자 호출)
     Calendar();

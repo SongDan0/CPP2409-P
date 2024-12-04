@@ -4,18 +4,6 @@
 Note::Note() {
     LoadMemo();
     AllocationMemo();
-    Menu();
-}
-
-// 메모장 표시
-void Note::PrintNote() {
-    system("cls");
-    cout << "page: " << current_page << endl; 
-    for(string str: note.at(current_page)) {
-        cout << str << endl;
-    }
-    for(int i = note.at(current_page).size(); i < 30; i++ )
-        cout << endl;
 }
 
 // 메모장 할당
@@ -72,6 +60,91 @@ void Note::LoadMemo() {
     }
 }
 
+// 비밀번호 설정
+void Note::SetPassword() {
+    while(true) {
+        string password;
+        string check_password;
+        
+        // 비밀번호 1차 입력
+        cout << "비밀번호를 입력해주세요: ";
+        getline(cin, password);
+        password.erase(remove(password.begin(), password.end(), ' '),
+            password.end());
+        
+        // 비밀번호 2차 입력
+        cout << "비밀번호를 다시 입력해주세요: ";
+        getline(cin, check_password);
+        check_password.erase(remove(check_password.begin(), check_password.end(), ' '),
+            check_password.end());
+
+        // 비밀번호 1차, 2차 같을 경우 비밀번호 설정    
+        if(password == check_password) {
+            this->password = password;
+            break;
+        }
+        // 비밀번호 1차, 2차 다를 경우 비밀번호 재입력    
+        else {
+            continue;
+        }
+    }
+
+    SaveMemo();
+}
+
+// 비밀번호 입력 받기 및 해제
+bool Note::Unlock() {
+    while(true) {
+        string input;
+        string password;
+        // 비밀번호가 없을 경우 잠금 해제
+        if(this->password == "") {
+            return true;
+        }
+        // 사용자 입력
+        cout << "패스워드, 뒤로가기 중 하나를 입력해주세요: ";
+        getline(cin, input);
+        input.erase(remove(input.begin(), input.end(), ' '), input.end());
+        // 패스워드가 맞을 경우 잠금해제
+        if(input == "패스워드") {
+            cout << "패스워드: ";
+            getline(cin, password);
+            input.erase(std::remove(input.begin(), input.end(), ' '), input.end());
+            if(this->password == password) {
+                return true;
+            }
+            // 패스워드가 틀릴 경우 문구 출력
+            else {
+                cout << "패스워드가 틀렸습니다." << endl;
+                continue;
+            }
+        }
+        else if(input == "뒤로가기") {
+            return false;
+        }
+        else {
+            cout << "잘못 입력하였습니다." << endl;
+            continue;
+        }
+    }
+}
+
+// 메모장 표시
+void Note::PrintNote() {
+    system("cls");
+    // 페이지 출력
+    cout << "page: " << current_page << endl; 
+    
+    // 메모 출력
+    for(string str: note.at(current_page)) {
+        cout << str << endl;
+    }
+
+    // 아래 공백 출력
+    for(int i = note.at(current_page).size(); i < 30; i++ )
+        cout << endl;
+}
+
 // 메모 추가
 void Note::AddMemo(string detail) {
     note[current_page].push_back(detail);
@@ -106,7 +179,6 @@ void Note::PriviousMemo() {
     }
     else {
         cout << "이전 페이지가 없습니다." << endl;
-        PrintNote();
     }
 }
 
@@ -121,48 +193,10 @@ void Note::PageMemo(int page) {
     }
 }
 
-// 비밀번호 설정
-void Note::SetPassword(string password) {
-    this->password = password;
-    SaveMemo();
-}
-
 // 메뉴
 void Note::Menu() {
     string input;
-    bool is_user = false;
-
-    // 패스워드 입력
-    while(true) {
-        string password;
-        if(this->password == "") {
-            is_user = true;
-            break;
-        }
-        cout << "패스워드, 뒤로가기 중 하나를 입력해주세요: ";
-        getline(cin, input);
-        input.erase(std::remove(input.begin(), input.end(), ' '), input.end());
-        if(input == "패스워드") {
-            cout << "패스워드: ";
-            getline(cin, password);
-            input.erase(std::remove(input.begin(), input.end(), ' '), input.end());
-            if(this->password == password) {
-                is_user = true;
-                break;
-            }
-            else {
-                cout << "패스워드가 틀렸습니다." << endl;
-                continue;
-            }
-        }
-        else if(input == "뒤로가기") {
-            break;
-        }
-        else {
-            cout << "잘못 입력하였습니다." << endl;
-            continue;
-        }
-    }
+    bool is_user = Unlock();
 
     // 초기 메모장 출력
     if(is_user) {
@@ -174,7 +208,7 @@ void Note::Menu() {
         // 사용자 입력
         cout << "추가, 삭제, 다음, 이전, 페이지, 비밀번호 설정, 뒤로가기 중 하나를 선택해서 입력해주세요: ";
         getline(cin, input);
-        input.erase(std::remove(input.begin(), input.end(), ' '), input.end());
+        input.erase(remove(input.begin(), input.end(), ' '), input.end());
 
         // 추가
         if(input == "추가") {
@@ -208,6 +242,7 @@ void Note::Menu() {
         else if(input == "페이지") {
             try {
                 int page;
+                cout << "페이지를 입력해주세요: ";
                 cin >> page;
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 if(cin.fail()){
@@ -222,25 +257,7 @@ void Note::Menu() {
         }
         // 패스워드 설정
         else if(input == "비밀번호설정") {
-            while(true) {
-                string password;
-                string check_password;
-                cout << "패스워드를 입력해주세요: ";
-                getline(cin, password);
-                password.erase(remove(password.begin(), password.end(), ' '),
-                    password.end());
-                cout << "패스워드를 다시 입력해주세요: ";
-                getline(cin, check_password);
-                check_password.erase(remove(check_password.begin(), check_password.end(), ' '),
-                    check_password.end());
-                if(password == check_password) {
-                    SetPassword(password);
-                    break;
-                }
-                else {
-                    continue;
-                }
-            }
+            SetPassword();
             PrintNote();
         }
         // 뒤로 가기
@@ -253,11 +270,6 @@ void Note::Menu() {
         }
 
     }
-}
-
-int main() {
-    new Note{};
-    return 0;
 }
 
 // Caesar Cipher 암호화 (모든 문자 포함)

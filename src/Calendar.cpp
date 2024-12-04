@@ -9,6 +9,7 @@ Calendar::Calendar() {
     current_day = dm->current_day;
     plan = new Planner{};
     account_book = new AccountBook{};
+    note = new Note{};
 }
 
 // 캘린더 일정 추가
@@ -293,12 +294,12 @@ void Calendar::PrintTotle(int year, int month, int day_s, int day_e, int space_p
 }   
 
 // 분리선 출력
-    void Calendar::PrintLine() {
-        cout << "├";
-        for(int i = 0; i < 6; i++)
-            cout << "──────────────────┼";
-        cout << "──────────────────┤" << endl;
-    }
+void Calendar::PrintLine() {
+    cout << "├";
+    for(int i = 0; i < 6; i++)
+        cout << "──────────────────┼";
+    cout << "──────────────────┤" << endl;
+}
 
 // 메뉴
 void Calendar::Menu() {
@@ -385,7 +386,8 @@ void Calendar::Menu() {
                 PrintCalendar(current_year, current_month);
             }
             else if(input == "암호화메모장") {
-
+                note->Menu();
+                PrintCalendar(current_year, current_month);
             }   
             else if(input == "가계부") {
                 account_book->Menu();

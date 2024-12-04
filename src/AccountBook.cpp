@@ -129,7 +129,7 @@ void AccountBook::Menu() {
     while(true) {
         try {
             // 사용자 입력
-            cout << "날짜 이동, 거래 내역 추가, 거래 내역 삭제 중 하나를 선택해서 입력해주세요: ";
+            cout << "날짜 이동, 거래 내역 추가, 거래 내역 삭제, 뒤로가기 중 하나를 선택해서 입력해주세요: ";
             getline(cin, input);
             input.erase(std::remove(input.begin(), input.end(), ' '), input.end());
 

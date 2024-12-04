@@ -62,7 +62,7 @@ void DataManagement::AddYear() {
 
 //환경 설정 파일 저장
 void DataManagement::SaveConfig() {
-    ofstream configFile("config");                              //config파일을 쓰기 모드로 열기                            
+    ofstream configFile("../storage/config");                   //config파일을 쓰기 모드로 열기                            
 
     if (configFile.is_open()) {                                 //파일이 정상적으로 열렸을 경우
         configFile << initial_year << " " << max_year_index;    //intitial_year maxYearIndex 저장
@@ -74,7 +74,7 @@ void DataManagement::SaveConfig() {
 
 //환경 설정 파일 불러오기
 void DataManagement::LoadConfig() {
-    ifstream configFile("config");                              //config파일을 읽기 모드로 열기
+    ifstream configFile("../storage/config");                   //config파일을 읽기 모드로 열기
 
     if (configFile.is_open()) {                                 //파일이 정상적으로 열렸을 경우
         configFile >> initial_year >> max_year_index;           //intitial_year, maxYearIndex 읽어오기
